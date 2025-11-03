@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NJT Customer Chat Plugin - Combined HTML/CSS/JS</title>
+    
+    <style type="text/css">
+        /* Admin CSS Styles */
+        .wp-menu-image.dashicons-before img {
+            padding: 6px 0 0 !important;
+        }
+
+        /* SWITCH BUTTON */
+        label.njt-switch-button {
+            position: relative;
+            display: block;
+            vertical-align: top;
+            width: 50px;
+            height: 20px;
+            padding: 3px;
+            margin: 2px -8px 0px 0;
+            background: linear-gradient(to bottom, #eeeeee, #FFFFFF 25px);
+            background-image: -webkit-linear-gradient(top, #eeeeee, #FFFFFF 25px);
+            border-radius: 18px;
+            box-shadow: inset 0 -1px white, inset 0 1px 1px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            box-sizing: content-box;
+        }
+
+        .njt-switch-button-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            box-sizing: content-box;
+        }
+
+        .njt-switch-button-label {
+            position: relative;
+            display: block;
+            height: inherit;
+            font-size: 10px;
+            text-transform: uppercase;
+            background: #eceeef;
+            border-radius: inherit;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12), inset 0 0 2px rgba(0, 0, 0, 0.15);
+            box-sizing: content-box;
+        }
+
+        .njt-switch-button-label:before,
+        .njt-switch-button-label:after {
+            position: absolute;
+            top: 50%;
+            margin-top: -.5em;
+            line-height: 1;
+            -webkit-transition: inherit;
+            -moz-transition: inherit;
+            -o-transition: inherit;
+            transition: inherit;
+            box-sizing: content-box;
+        }
+
+        .njt-switch-button-label:before {
+            content: attr(data-off);
+            right: 11px;
+            color: #aaaaaa;
+            text-shadow: 0 1px rgba(255, 255, 255, 0.5);
+        }
+
+        .njt-switch-button-label:after {
+            content: attr(data-on);
+            left: 11px;
+            color: #FFFFFF;
+            text-shadow: 0 1px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+        }
+
+        .njt-switch-button-input:checked ~ .njt-switch-button-label {
+            background: #5cdc3c;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15), inset 0 0 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .njt-switch-button-input:checked ~ .njt-switch-button-label:before {
+            opacity: 0;
+        }
+
+        .njt-switch-button-input:checked ~ .njt-switch-button-label:after {
+            opacity: 1;
+        }
+
+        .njt-switch-button-handle {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(to bottom, #FFFFFF 40%, #f0f0f0);
+            background-image: -webkit-linear-gradient(top, #FFFFFF 40%, #f0f0f0);
+            border-radius: 100%;
+            box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .njt-switch-button-handle:before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -6px 0 0 -6px;
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(to bottom, #eeeeee, #FFFFFF);
+            background-image: -webkit-linear-gradient(top, #eeeeee, #FFFFFF);
+            border-radius: 6px;
+            box-shadow: inset 0 1px rgba(0, 0, 0, 0.02);
+        }
+
+        .njt-switch-button-input:checked ~ .njt-switch-button-handle {
+            left: 35px;
+            box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        p.p_njt_app_like_comment {
+            font-weight: 500;
+        }
+
+        /* Additional Styles for Setup Page */
+        .notice.notice-warning {
+            display: none;
+        }
+
+        .wrap {
+            margin: 20px;
+        }
+
+        .wp-heading-inline {
+            font-size: 23px;
+            font-weight: 400;
+            margin: 0;
+            padding: 9px 0 4px;
+            line-height: 1.3;
+        }
+
+        .notice.notice-success {
+            border-left: 4px solid #46b450;
+            background: #fff;
+            padding: 12px;
+            margin: 15px 0;
+        }
+
+        .form-table {
+            border-collapse: collapse;
+            margin-top: 0.5em;
+            width: 100%;
+            clear: both;
+        }
+
+        .form-table th {
+            width: 200px;
+            padding: 20px 10px 20px 0;
+            line-height: 1.3;
+            font-weight: 600;
+            vertical-align: top;
+        }
+
+        .form-table td {
+            margin-bottom: 9px;
+            padding: 15px 10px;
+            line-height: 1.3;
+            vertical-align: middle;
+        }
+
+        .form-table tr {
+            border-bottom: 1px solid #ddd;
+        }
+
+        .regular-text {
+            width: 25em;
+            padding: 3px 5px;
+            font-size: 14px;
+        }
+
+        .description {
+            color: #666;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        select {
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .submit {
+            padding: 0;
+            margin: 0;
+        }
+
+        button[type="submit"] {
+            background: #0073aa;
+            border-color: #0073aa;
+            color: #fff;
+            text-decoration: none;
+            text-shadow: none;
+            padding: 0 10px;
+            line-height: 2;
+            height: 30px;
+            border-radius: 3px;
+            cursor: pointer;
+            border: 1px solid;
+            font-size: 13px;
+        }
+
+        button[type="submit"]:hover {
+            background: #005177;
+            border-color: #005177;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Settings Form HTML -->
+    <div class="wrap">
+        <h1 class="wp-heading-inline">General Settings</h1>
+    </div>
+
+    <div id="success-message" style="margin-left: 20px; margin-top: 15px; display: none;" class="notice notice-success is-dismissible">
+        <p>Save changed!</p>
+    </div>
+
+    <form id="customer-chat-form" style="margin: 20px;">
+        <table class="form-table">
+            <tbody>
+                <tr>
+                    <th scope="row">
+                        <label>Enable Messenger Chatbox</label>
+                    </th>
+                    <td>
+                        <label class="njt-switch-button">
+                            <input name="njt_customer_chat_enable" class="njt-switch-button-input njt_customer_chat_enable" type="checkbox" checked />
+                            <span class="njt-switch-button-label" data-on="On" data-off="Off"></span> 
+                            <span class="njt-switch-button-handle"></span> 
+                        </label>
+                        <p class="description">Enable if you want to display Messenger Customer Chatbox on your website</p>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th scope="row">
+                        <label>Languages</label>
+                    </th>
+                    <td>
+                        <select name="njt_customer_chat_languages" id="njt_customer_chat_languages" class="njt_customer_chat_languages">
+                            <option value="en_US" selected>English (US)</option>
+                            <option value="en_GB">English (GB)</option>
+                            <option value="es_ES">Spanish (Spain)</option>
+                            <option value="fr_FR">French (France)</option>
+                            <option value="de_DE">German</option>
+                            <option value="it_IT">Italian</option>
+                            <option value="ja_JP">Japanese</option>
+                            <option value="ko_KR">Korean</option>
+                            <option value="zh_CN">Simplified Chinese (China)</option>
+                            <option value="pt_BR">Portuguese (Brazil)</option>
+                            <option value="ru_RU">Russian</option>
+                            <option value="ar_AR">Arabic</option>
+                            <option value="hi_IN">Hindi</option>
+                        </select>
+                        <p class="description">Select the language using for Messenger Chatbox</p>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th scope="row">
+                        <label>Step 1: Enter your Page ID</label>
+                    </th>
+                    <td>
+                        <input type="text" class="regular-text" id="njt_customer_chat_list_page" name="njt_customer_chat_list_page" value="1526684747623433" required>
+                        <p class="description">You can find your Page ID from menu <strong>Settings > About</strong> from your fan page. <a href="http://take.ms/nobo5" target="_blank">See this screenshot</a></p>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th scope="row">
+                        <label>Step 2: Add your domain in Whitelist</label>
+                    </th>
+                    <td>
+                        <p><a href="http://take.ms/DPB1C" target="_blank">How to do it?</a></p>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th scope="row">
+                        <label>Need help? <p><a href="https://m.me/ninjateam.org" target="_blank">Chat with us</a></p></label>
+                    </th>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="submit">
+            <button type="submit" class="button button-primary">Save Changes</button>
+        </p>
+    </form>
+
+    <!-- Facebook Messenger Chat Plugin Container -->
+    <div class="fb-customerchat" page_id="1526684747623433" ref=""></div>
+
+    <!-- JavaScript -->
+    <script type="text/javascript">
+        // Facebook Messenger Plugin Initialization
+        window.fbMessengerPlugins = window.fbMessengerPlugins || { 
+            init: function () { 
+                FB.init({ 
+                    appId: '983715691729450',
+                    autoLogAppEvents: true,
+                    xfbml: true,
+                    version: 'v2.11'
+                });
+            }, 
+            callable: []      
+        };
+
+        window.fbAsyncInit = window.fbAsyncInit || function () { 
+            window.fbMessengerPlugins.callable.forEach(function (item) { 
+                item(); 
+            });
+            window.fbMessengerPlugins.init(); 
+        };
+
+        // Load Facebook SDK
+        setTimeout(function () {  
+            (function (d, s, id) {  
+                var js, fjs = d.getElementsByTagName(s)[0]; 
+                if (d.getElementById(id)) { return; } 
+                js = d.createElement(s);
+                js.id = id;
+                
+                // Get language from select element
+                var language = document.getElementById('njt_customer_chat_languages').value || 'en_US';
+                js.src = "//connect.facebook.net/" + language + "/sdk/xfbml.customerchat.js"; 
+                fjs.parentNode.insertBefore(js, fjs);        
+            }(document, 'script', 'facebook-jssdk')); 
+        }, 0);
+
+        // Form submission handler
+        document.getElementById('customer-chat-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            var enableChat = document.querySelector('.njt_customer_chat_enable').checked;
+            var language = document.getElementById('njt_customer_chat_languages').value;
+            var pageId = document.getElementById('njt_customer_chat_list_page').value;
+            
+            // Store in localStorage (simulating WordPress options)
+            localStorage.setItem('njt_customer_chat_enable', enableChat ? 'on' : 'off');
+            localStorage.setItem('njt_customer_chat_languages', language);
+            localStorage.setItem('njt_customer_chat_list_page', pageId);
+            
+            // Show success message
+            var successMsg = document.getElementById('success-message');
+            successMsg.style.display = 'block';
+            
+            // Hide success message after 3 seconds
+            setTimeout(function() {
+                successMsg.style.display = 'none';
+            }, 3000);
+            
+            // Update Facebook chat widget with new page ID
+            var fbChat = document.querySelector('.fb-customerchat');
+            if (fbChat) {
+                fbChat.setAttribute('page_id', pageId);
+            }
+            
+            console.log('Settings saved:', {
+                enabled: enableChat,
+                language: language,
+                pageId: pageId
+            });
+        });
+
+        // Load saved settings on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            var savedEnable = localStorage.getItem('njt_customer_chat_enable');
+            var savedLanguage = localStorage.getItem('njt_customer_chat_languages');
+            var savedPageId = localStorage.getItem('njt_customer_chat_list_page');
+            
+            if (savedEnable !== null) {
+                document.querySelector('.njt_customer_chat_enable').checked = (savedEnable === 'on');
+            }
+            
+            if (savedLanguage) {
+                document.getElementById('njt_customer_chat_languages').value = savedLanguage;
+            }
+            
+            if (savedPageId) {
+                document.getElementById('njt_customer_chat_list_page').value = savedPageId;
+            }
+        });
+    </script>
+
+</body>
+</html>
